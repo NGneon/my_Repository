@@ -1,4 +1,4 @@
-const { createApp } = Vue
+const { createApp } = Vue;
 
 createApp({
 	data() {
@@ -23,7 +23,7 @@ createApp({
 				this.amount *
 				(this.exchangeRates[this.toCurrency] /
 					this.exchangeRates[this.fromCurrency])
-			this.convertedAmount = result.toFixed(2)
+			this.convertedAmount = result.toFixed(2);
 		},
 		saveToHistory() {
 			if (this.convertedAmount !== null) {
@@ -33,25 +33,25 @@ createApp({
 					amount: this.amount,
 					result: this.convertedAmount,
 				}
-				this.conversionHistory.unshift(conversion)
+				this.conversionHistory.unshift(conversion);
 				if (this.conversionHistory.length > this.maxHistoryItems) {
-					this.conversionHistory.pop()
+					this.conversionHistory.pop();
 				}
-				this.saveHistoryToLocalStorage()
+				this.saveHistoryToLocalStorage();
 			}
 		},
 		clearHistory() {
-			this.conversionHistory = []
-			this.saveHistoryToLocalStorage()
+			this.conversionHistory = [];
+			this.saveHistoryToLocalStorage();
 		},
 		saveHistoryToLocalStorage() {
 			localStorage.setItem(
 				'conversionHistory',
 				JSON.stringify(this.conversionHistory)
-			)
+			);
 		},
 		loadHistoryFromLocalStorage() {
-			const savedHistory = localStorage.getItem('conversionHistory')
+			const savedHistory = localStorage.getItem('conversionHistory');
 			if (savedHistory) {
 				this.conversionHistory = JSON.parse(savedHistory)
 			}
@@ -59,10 +59,10 @@ createApp({
 	},
 	computed: {
 		isValidInput() {
-			return this.amount > 0 && this.fromCurrency !== this.toCurrency
+			return this.amount > 0 && this.fromCurrency !== this.toCurrency;
 		},
 	},
 	mounted() {
-		this.loadHistoryFromLocalStorage()
+		this.loadHistoryFromLocalStorage();
 	},
 }).mount('#app')
