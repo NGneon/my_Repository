@@ -411,5 +411,5 @@ require_once 'Employee.php';
 // $cube = new Cube(3);
 // echo $cube->getOb(). '<br>';
 // echo $cube->getSquare();
-
+echo "mur mau";
 ?>
