@@ -14,7 +14,7 @@ const SkeletBota = () => {
         { command: '/info', description: 'Информация о пользователе' },
     ]);
     let i = 1;
-    bot.on('message', async (msg) => {
+    bot.on('message', (msg) => {
         const chatId = msg.chat.id;
         const text = msg.text;
         if (text === '/start') {
@@ -26,9 +26,9 @@ const SkeletBota = () => {
             bot.sendMessage(chatId, `Твое имя ${msg.from.first_name} и твой username: ${msg.from.username}`);
         }
         if (text.length > 0) {
-            if (text.length < 150) {
+            if (text.length <= 150) {
                 if (!msg.text.startsWith('/')) {
-                    const audioFile = path.join(__dirname, `частушка${i++}.mp3`);
+                    const audioFile = path.join(__dirname, `частушка ${i++}.mp3`);
                     const cleanedText = removeSpecialCharacters(text);
                     if (!cleanedText.trim()) {
                         bot.sendMessage(chatId, 'Бот не озвучивает спец символы. Попробуйте еще раз.');
