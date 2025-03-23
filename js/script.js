@@ -1,16 +1,3 @@
-// let inp1 = document.querySelector('.inp1');
-// let btn = document.querySelector('.btn');
-// function dodik(){
-//     if(inp1.value === "Данила Кириченко"){
-//         alert('Сэр, вы долбаеб');
-//     } else{
-//         alert('Ну что ты, '+inp1.value+', не долбаеб');
-//     }
-//     inp1.value = '';
-// }
-
-// btn.addEventListener('click', dodik);
-
 //Прототип
 // const pivnaya_brigada = {
 //     name: 'Daniil',
