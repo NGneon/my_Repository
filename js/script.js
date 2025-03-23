@@ -396,3 +396,76 @@
 //   console.log(num)
 // }
 
+//Методы массивов (forEach, map, filter, reduce, find, findIndex)
+// const people = [
+//   { name: 'Daniil', age: 19, budget: 40000 },
+//   { name: 'Vladimir', age: 25, budget: 52222 },
+//   { name: 'Natalia', age: 30, budget: 1111 },
+//   { name: 'Andrei', age: 35, budget: 12234 },
+//   { name: 'Viktor', age: 12, budget: 4321},
+//   { name: 'Sofia', age: 15, budget: 5678 }
+// ]
+
+// forEach: index и pArr используются очень редко, ниже полная заипись
+// people.forEach(function(person, index, pArr){
+//   console.log(person)
+// }) 
+
+//ниже короткая запись
+// people.forEach(person => console.log(person))
+
+//map - можем создавать новые массивы и соответственно как результат мы заносим их в новую переменную 
+// (служит для преобразования текущего массива в нвоый)
+// const newPeople = people.map(person=> `Name: ${person.name}, Age:${person.age}, Budget:${person.budget}`)
+// console.log(newPeople)
+
+//filter - служит для того, чтобы фильтровали по какому-либо условию исходный массив
+// const adults = people.filter(person=>person.age>=18)
+// console.log(adults)
+
+//reduce - принимает два параметра - колбэк в него входят два параметра total и итерируемый элемент у массива;
+// второй параметр это начальное значение, которое присвоено параметру total у колбэка
+// const amount = people.reduce((total, person)=>total + person.budget, 0)
+// console.log(amount)
+
+//find - служит для того, чтобы по условию найти нужный какой-то элемент
+// const find = people.find(person => person.name === 'Daniil');
+// console.log(find)
+
+//findIndex - служит для того, чтобы по условию найти индекс какого-то элемента
+
+// const findIndex = people.findIndex(person => person.name === 'Daniil');
+// console.log(findIndex)
+
+// const amount =  people.filter(person => person.budget>=3000).map(person =>{
+//   return {
+//     info: `${person.name} (${person.age})`,
+//     budget: person.budget
+//   }
+// }).reduce((total, person) => total + person.budget,0)
+// console.log(amount)
+
+// Все о Map, Set, WeakMap, WeakSet
+//.entries() - метод, который позволяет перевести объект к записи массива
+//.fromEntries() - метод, который позволяет перевести массив к записи объекта
+const obj = {
+  name: 'Daniil',
+  age: 19,
+  job: 'Frontend'
+}
+const entriess = [
+  ['name', 'Daniil'],
+  ['age', 19],
+  ['job', 'Frontend']
+]
+// console.log(Object.entries(obj))
+// console.log(Object.fromEntries(entriess))
+//отличие объектов от Map
+//в Map мы можем обращаться через различные методы к полям, 
+//также можем в качестве ключей объекта указывать не только строчки при создании объекта,
+// а указывать абсолютно любые типы данных и они будут являться ключами
+//.delete('key_name') - удаление ключа, выводит bool значение
+//.has('key_name') - проверка на существование ключа
+const map = new Map(entriess)
+map.delete('age');
+console.log(map.has('age'))
