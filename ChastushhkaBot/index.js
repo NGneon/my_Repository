@@ -8,7 +8,6 @@ const ffmpegPath = require('ffmpeg-static');
 const token = '7326293550:AAG73aSy1swxcmyq1_eq4d1eZdXS8TVxPfk';
 const bot = new TelegramApi(token, { polling: true });
 
-// Объект для отслеживания активных обработок
 const processingQueue = new Set();
 
 function removeSpecialCharacters(text) {
@@ -26,27 +25,21 @@ const SkeletBota = () => {
         const messageId = msg.message_id;
         const text = msg.text;
 
-        // Уникальный ключ для блокировки
         const processKey = `${chatId}_${messageId}`;
 
-        // Если сообщение уже обрабатывается - игнорируем
         if (processingQueue.has(processKey)) {
             return;
         }
 
-        // Добавляем в очередь обработки
         processingQueue.add(processKey);
 
-        // Объявляем переменные для файлов
         let audioFile, processedAudio, outputFile;
 
         try {
             if (text === '/start') {
-                // Приветственное сообщение
                 await bot.sendMessage(chatId, "🎵 Привет! Я частушка бот\nОтправь мне текст от 100 до 120 символов, и я превращу его в музыкальную частушку!");
                 
-                // Отправка примера аудио
-                const exampleAudio = path.join(__dirname, 'Chastushka_example.mp3'); // Файл должен существовать
+                const exampleAudio = path.join(__dirname, 'Chastushka_example.mp3');
                 if (fs.existsSync(exampleAudio)) {
                     await bot.sendAudio(chatId, exampleAudio);
                 } else {
@@ -55,7 +48,6 @@ const SkeletBota = () => {
                 return;
             }
             
-            // Остальной код без изменений...
             if (text === '/info') {
                 await bot.sendMessage(chatId, `Твое имя ${msg.from.first_name} и твой username: ${msg.from.username}`);
                 return;
@@ -85,12 +77,10 @@ const SkeletBota = () => {
             outputFile = path.join(__dirname, `Частушка.mp3`);
             const musicFile = path.join(__dirname, 'background.mp3');
 
-            // Генерация аудио из текста
             await new Promise((resolve, reject) => {
                 new gTTS(text, 'ru').save(audioFile, err => err ? reject(err) : resolve());
             });
 
-            // Обработка аудио
             await new Promise((resolve, reject) => {
                 ffmpeg(audioFile)
                     .setFfmpegPath(ffmpegPath)
@@ -101,7 +91,6 @@ const SkeletBota = () => {
             });
             fs.unlinkSync(audioFile);
 
-            // Микширование с музыкой
             await new Promise((resolve, reject) => {
                 ffmpeg()
                     .setFfmpegPath(ffmpegPath)
@@ -118,19 +107,16 @@ const SkeletBota = () => {
             });
             fs.unlinkSync(processedAudio);
 
-            // Отправка финального аудио пользователю
             await bot.sendAudio(chatId, outputFile);
 
         } catch (error) {
             console.error(error);
             await bot.sendMessage(chatId, 'Произошла ошибка при обработке вашего запроса. Пожалуйста, попробуйте еще раз.');
         } finally {
-            // Удаляем временные файлы если они существуют
             if (audioFile && fs.existsSync(audioFile)) fs.unlinkSync(audioFile);
             if (processedAudio && fs.existsSync(processedAudio)) fs.unlinkSync(processedAudio);
             if (outputFile && fs.existsSync(outputFile)) fs.unlinkSync(outputFile);
             
-            // Удаляем из очереди обработки
             processingQueue.delete(processKey);
         }
     });
