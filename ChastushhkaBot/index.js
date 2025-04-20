@@ -5,7 +5,7 @@ const path = require('path');
 const ffmpeg = require('fluent-ffmpeg');
 const ffmpegPath = require('ffmpeg-static');
 
-const token = '7326293550:AAG73aSy1swxcmyq1_eq4d1eZdXS8TVxPfk'; // Замените на ваш токен
+const token = '7326293550:AAG73aSy1swxcmyq1_eq4d1eZdXS8TVxPfk';
 const bot = new TelegramApi(token, { polling: true });
 
 // Объект для отслеживания активных обработок
@@ -42,10 +42,20 @@ const SkeletBota = () => {
 
         try {
             if (text === '/start') {
-                await bot.sendMessage(chatId, "Привет! Я частушка бот, отправь мне текст, и я сгенерирую тебе частушку\nвот наглядный пример");
+                // Приветственное сообщение
+                await bot.sendMessage(chatId, "🎵 Привет! Я частушка бот\nОтправь мне текст от 100 до 120 символов, и я превращу его в музыкальную частушку!");
+                
+                // Отправка примера аудио
+                const exampleAudio = path.join(__dirname, 'Chastushka_example.mp3'); // Файл должен существовать
+                if (fs.existsSync(exampleAudio)) {
+                    await bot.sendAudio(chatId, exampleAudio);
+                } else {
+                    console.warn('Пример аудиофайла не найден');
+                }
                 return;
             }
             
+            // Остальной код без изменений...
             if (text === '/info') {
                 await bot.sendMessage(chatId, `Твое имя ${msg.from.first_name} и твой username: ${msg.from.username}`);
                 return;
@@ -56,10 +66,10 @@ const SkeletBota = () => {
             }
             if(text.length < 100){
                 await bot.sendMessage(chatId, 'Твой текст слишком короткий. Минимальная длина текста - 100 символов');
-                return
+                return;
             }
-            if (text.length > 150) {
-                await bot.sendMessage(chatId, 'Твой текст слишком длинный. Максимальная длина текста - 150 символов.');
+            if (text.length > 120) {
+                await bot.sendMessage(chatId, 'Твой текст слишком длинный. Максимальная длина текста - 120 символов.');
                 return;
             }
 
@@ -72,7 +82,7 @@ const SkeletBota = () => {
             const timestamp = Date.now();
             audioFile = path.join(__dirname, `audio_${timestamp}.mp3`);
             processedAudio = path.join(__dirname, `processed_${timestamp}.mp3`);
-            outputFile = path.join(__dirname, `result_${timestamp}.mp3`);
+            outputFile = path.join(__dirname, `Частушка.mp3`);
             const musicFile = path.join(__dirname, 'background.mp3');
 
             // Генерация аудио из текста
@@ -84,7 +94,7 @@ const SkeletBota = () => {
             await new Promise((resolve, reject) => {
                 ffmpeg(audioFile)
                     .setFfmpegPath(ffmpegPath)
-                    .audioFilters('adelay=10000|10000,volume=6.5,atempo=1.25')
+                    .audioFilters('adelay=10000|10000,volume=6.5,atempo=1.27')
                     .on('error', reject)
                     .on('end', resolve)
                     .save(processedAudio);
