@@ -1,14 +1,14 @@
-const TelegramApi = require('node-telegram-bot-api') //Telegram Api
-const gTTS = require('gtts') // google Text-To-Speech
-const fs = require('fs') // file system
-const path = require('path') // path to file
+const TelegramApi = require('node-telegram-bot-api')
+const gTTS = require('gtts')
+const fs = require('fs')
+const path = require('path')
 const ffmpeg = require('fluent-ffmpeg') // Обработка аудио (очень сильный инструмент для обработки мультимедиа)
 const ffmpegPath = require('ffmpeg-static') // путь к ffmpeg
 
 const token = '7326293550:AAG73aSy1swxcmyq1_eq4d1eZdXS8TVxPfk'
 const bot = new TelegramApi(token, { polling: true }) //бот опрашивает сервер Telegram на наличие новых сообщений
 
-const processingQueue = new Set() //предотвращение дублирования
+const processingQueue = new Set()
 
 function removeSpecialCharacters(text) {
 	return text.replace(/[^а-яА-ЯёЁa-zA-Z\s.,!?-]/gi, '') // оставляет только буквы и основные знаки препинания
@@ -21,9 +21,10 @@ const SkeletBota = () => {
 		const messageId = msg.message_id
 		const text = msg.text
 
-		const processKey = `${chatId}_${messageId}` 
+		const processKey = `${chatId}_${messageId}`
 
-		if (processingQueue.has(processKey)) { //has - если сообщение в обработке, то предотвращает дублирование
+		if (processingQueue.has(processKey)) {
+			//has - если сообщение в обработке, то предотвращает дублирование
 			return
 		} //проверка на дублирование
 
@@ -50,7 +51,7 @@ const SkeletBota = () => {
 			//игнор команд
 			if (!text || text.startsWith('/')) {
 				return
-			} 
+			}
 			//проверка длины текста
 			if (text.length < 90) {
 				await bot.sendMessage(
@@ -73,7 +74,7 @@ const SkeletBota = () => {
 					'Бот не озвучивает цифры. Пожалуйста, удалите цифры из текста и попробуйте снова 🔄'
 				)
 				return
-			} 
+			}
 			//чистка текста
 			const cleanedText = removeSpecialCharacters(text)
 			if (!cleanedText.trim()) {
@@ -127,7 +128,7 @@ const SkeletBota = () => {
 					.on('end', resolve)
 					.save(outputFile)
 			})
-			fs.unlinkSync(processedAudio) //удаление промежутачного файла
+			fs.unlinkSync(processedAudio) //удаление промежуточного файла
 
 			if (processingMessage) {
 				await bot.deleteMessage(chatId, processingMessage.message_id) //удаление сообщения о работе с частушкой
